@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    container_name: container_mongodb_contact_list
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_contact_list_api:/data/db
+
+  fastapi:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: contact_list_fastapi
+    ports:
+      - 8000:8000
+    environment:
+      MONGODB_URL: mongodb://container_mongodb_contact_list:27017
+      DATABASE_NAME: contact_list_db
+    depends_on:
+      - mongodb
+
+volumes:
+  mongodb_contact_list_api:
