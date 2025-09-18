@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from database import connect_to_mongo, close_mongo_connection
-from routers import contact
+from backend.database import connect_to_mongo, close_mongo_connection
+from backend.routers import contact
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

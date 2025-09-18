@@ -1,13 +1,16 @@
 from fastapi import APIRouter, HTTPException, status
 from typing import List
-from models.contact import Contact
-from services.contact_service import contact_service
+from backend.models.contact import Contact
+from backend.services.contact_service import contact_service
 
 router = APIRouter(prefix="/contacts", tags=["contacts"])
 
 @router.get("/", response_model=List[Contact])
-async def get_all_contacts():
+async def get_all_contacts(name: str | None = None):
     """Get all contacts"""
+    if name :
+        contacts = await contact_service.get_contact_by_name_like(name)
+        return contacts    
     contacts = await contact_service.get_all_contacts()
     return contacts
 
@@ -54,3 +57,8 @@ async def delete_contact(contact_id: str):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Contact not found"
         )
+
+# @router.get("/", status_code=status.HTTP_200_OK)
+# async def get_by_name_like(name: str):
+#     contacts = await contact_service.get_contact_by_name_like(name)
+#     return contacts

@@ -1,12 +1,9 @@
-import os
 from motor.motor_asyncio import AsyncIOMotorClient  # pyright: ignore[reportMissingImports]
-from dotenv import load_dotenv
-
-load_dotenv()
+from backend.config import config
 
 # MongoDB connection settings
-MONGODB_URL = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
-DATABASE_NAME = os.getenv("DATABASE_NAME", "contact_list_db")
+MONGODB_URL = config.DATABASE_URL
+DATABASE_NAME = config.DATABASE_NAME
 
 # Global variable to store the database connection
 client = None

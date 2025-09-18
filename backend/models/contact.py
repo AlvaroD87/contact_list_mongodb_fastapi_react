@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 from bson import ObjectId  # pyright: ignore[reportMissingImports]
+from pydantic import ConfigDict
 
 class PyObjectId(ObjectId):
     @classmethod
@@ -28,10 +29,12 @@ class Contact(BaseModel):
     email: str
     notes: str
 
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
+
+    model_config = ConfigDict(
+        populate_by_name = True,
+        arbitrary_types_allowed = True,
         json_encoders = {ObjectId: str}
+    )
 
     def to_dict(self):
         return {

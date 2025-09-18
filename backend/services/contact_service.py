@@ -1,7 +1,7 @@
 from typing import List, Optional
 from bson import ObjectId  # pyright: ignore[reportMissingImports]
-from database import get_database
-from models.contact import Contact
+from backend.database import get_database
+from backend.models.contact import Contact
 
 class ContactService:
     def __init__(self):
@@ -72,5 +72,15 @@ class ContactService:
         except Exception:
             return False
 
+    async def get_contact_by_name_like(self, c_name: str) -> List[Contact]:
+        collection = self.get_collection()
+
+        try:
+            list_contact_doc = await collection.find({"name": {"$regex": c_name, "$options": "i"}})
+            list_return = [Contact(**c) for c in list_contact_doc]
+            return list_return
+        except Exception:
+            None
+    
 # Create a singleton instance
 contact_service = ContactService()
