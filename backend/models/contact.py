@@ -24,10 +24,10 @@ class Contact(BaseModel):
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
     name: str
     primary_surname: str
-    secondary_surname: str
-    phone: str
+    secondary_surname: Optional[str] = None
+    phone: Optional[str] = None
     email: str
-    notes: str
+    notes: Optional[str] = None
 
 
     model_config = ConfigDict(
