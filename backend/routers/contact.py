@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Request
 from typing import List
 from backend.models.contact import Contact
 from backend.services.contact_service import contact_service
@@ -6,10 +6,11 @@ from backend.services.contact_service import contact_service
 router = APIRouter(prefix="/contacts", tags=["contacts"])
 
 @router.get("/", response_model=List[Contact])
-async def get_all_contacts(name: str | None = None):
+async def get_all_contacts(request: Request):
     """Get all contacts"""
-    if name :
-        contacts = await contact_service.get_contact_by_name_like(name)
+    query_params = dict(request.query_params)
+    if len(query_params.items()) > 0:
+        contacts = await contact_service.get_contact_by_attributes_like(query_params)
         return contacts    
     contacts = await contact_service.get_all_contacts()
     return contacts

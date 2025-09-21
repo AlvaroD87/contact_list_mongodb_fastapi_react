@@ -71,15 +71,16 @@ class ContactService:
             return result.deleted_count > 0
         except Exception:
             return False
-
-    async def get_contact_by_name_like(self, c_name: str) -> List[Contact]:
+    
+    async def get_contact_by_attributes_like(self, d_attrs: dict) -> List[Contact]:
         collection = self.get_collection()
 
         contacts = []
-        async for c in collection.find({"name": {"$regex": c_name, "$options": "i"}}):
+        d_query = {f"{i[0]}":{"$regex": f"{i[1]}", "$options": "i"} for i in d_attrs.items()}
+        async for c in collection.find(d_query):
             contacts.append(Contact(**c))
         
         return contacts
-    
+
 # Create a singleton instance
 contact_service = ContactService()
